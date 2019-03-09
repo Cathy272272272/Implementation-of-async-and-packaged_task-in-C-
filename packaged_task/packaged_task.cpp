@@ -4,28 +4,6 @@
 #include <ctime> 
 #include <cmath>
 
-template <typename> class my_task;
-
-template <typename R, typename ...Args>
-class my_task<R(Args...)>
-{
-    std::function<R(Args...)> fn; //use std::function to store function and arguments
-    std::promise<R> pr;             
-public:
-    template <typename ...Ts>
-    explicit my_task(Ts &&... ts) : fn(std::forward<Ts>(ts)...) { }
-
-    template <typename ...Ts>
-    void operator()(Ts &&... ts)
-    {
-        //pass function and arguments
-        pr.set_value(fn(std::forward<Ts>(ts)...));  
-    }
-
-    std::future<R> get_future() { return pr.get_future(); }
-
-    // disable copy, default move
-};
 template<typename> class packaged_task;
 template< class R, class ...Args > 
 class packaged_task<R(Args...)>{
